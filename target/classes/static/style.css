@@ -1,0 +1,741 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.content-wrapper {
+    background: white;
+    border-radius: 40px 40px 0 0;
+    max-width: 550px;
+    margin: 80px auto 0;
+    padding: 30px 20px 40px;
+    box-shadow: 0 -5px 20px rgba(255, 105, 180, 0.1);
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 20px;
+    box-shadow: 0 2px 10px rgba(255, 105, 180, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.greeting {
+    font-size: 16px;
+    color: #ff69b4;
+    font-weight: 500;
+}
+
+.logout-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 25px;
+    background: #ffb6c1;
+    color: white !important;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: #ff69b4;
+    color: white;
+}
+
+.main-content-center {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kitty-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 120px;
+    min-height: 200px;
+}
+
+.main-kitty {
+    width: 160px;
+    height: 160px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+    margin-top: 30px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.thought-bubble-main {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 10px 18px;
+    border-radius: 30px;
+    border: 2px solid #ff69b4;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(255, 105, 180, 0.2);
+    font-size: 12px;
+    line-height: 1.4;
+    z-index: 10;
+    width: auto;
+    max-width: 280px;
+    white-space: normal;
+}
+
+.thought-bubble-main::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #ff69b4;
+}
+
+.thought-bubble-main::before {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+    z-index: 1;
+}
+
+.main-title {
+    color: #ff69b4;
+    font-size: 20px;
+    margin: 10px 0 15px;
+    text-align: center;
+}
+
+.calendar-section {
+    width: 100%;
+    background: #ffe6f0;
+    border-radius: 24px;
+    padding: 18px;
+    margin: 10px 0;
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
+    border: 1px solid #ffc0cb;
+}
+
+.phase-card {
+    background: white;
+    text-align: center;
+    padding: 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(255, 105, 180, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.phase-card:hover {
+    transform: scale(1.02);
+    filter: brightness(0.98);
+}
+
+.phase-day-number {
+    font-size: 28px;
+    font-weight: bold;
+}
+.phase-day-number.period { color: #ff69b4; }
+.phase-day-number.follicular { color: #2d6a2d; }
+.phase-day-number.ovulation { color: #8b7500; }
+.phase-day-number.luteal { color: #6a3d8a; }
+
+.phase-name-text {
+    font-size: 14px;
+    margin-top: 4px;
+}
+.phase-name-text.period { color: #ff69b4; }
+.phase-name-text.follicular { color: #2d6a2d; }
+.phase-name-text.ovulation { color: #8b7500; }
+.phase-name-text.luteal { color: #6a3d8a; }
+
+.calendar-week-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.weekday-cell {
+    font-weight: bold;
+    color: #ff69b4;
+    font-size: 13px;
+    padding: 5px 0;
+    background: white;
+    border-radius: 20px;
+}
+
+.calendar-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    text-align: center;
+}
+
+.day-button {
+    background: white;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ffc0cb;
+    color: #333;
+}
+
+.day-button:hover {
+    background: #ffb6c1;
+    color: white;
+    transform: scale(1.05);
+}
+
+.day-button.today {
+    border: 2px solid #2d6a2d;
+    font-weight: bold;
+}
+.day-button.today.period { background-color: #ffb6c1 !important; color: white; }
+.day-button.today.follicular { background-color: #ccffcc !important; color: #2d6a2d; }
+.day-button.today.ovulation { background-color: #ffffcc !important; color: #8b7500; }
+.day-button.today.luteal { background-color: #e6ccff !important; color: #6a3d8a; }
+
+.day-button.period { background: #ffb6c1; color: white; border: none; }
+.day-button.follicular { background: #ccffcc; color: #2d6a2d; border: none; }
+.day-button.ovulation { background: #ffec80; color: #8b7500; border: none; }
+.day-button.luteal { background: #e6ccff; color: #6a3d8a; border: none; }
+
+.day-button.sex-protected { background: #dda0dd; color: white; border: none; }
+.day-button.sex-unprotected { background: #ffa07a; color: white; border: none; }
+.day-button.pms { background: #d8bfd8; color: white; border: none; }
+
+.survey-blocks {
+    width: 100%;
+    margin: 15px 0;
+}
+
+.survey-block {
+    background: #ffb6c1;
+    border-radius: 18px;
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+    color: white;
+    transition: background 0.2s;
+}
+
+.survey-block.disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.survey-block.disabled:hover {
+    background: #cccccc;
+}
+
+.survey-block:hover {
+    background: #ff69b4;
+}
+
+.block-header {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.block-value {
+    font-size: 13px;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.block-options {
+    background: white;
+    border-radius: 15px;
+    margin-top: 8px;
+    padding: 8px;
+    position: absolute;
+    width: calc(100% - 36px);
+    left: 18px;
+    top: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 100;
+    border: 2px solid #ff69b4;
+}
+
+.block-options div {
+    padding: 8px;
+    border-bottom: 1px solid #ffb6c1;
+    color: #ff69b4;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 13px;
+}
+
+.block-options div:last-child {
+    border-bottom: none;
+}
+
+.block-options div:hover {
+    background: #ffe6f0;
+}
+
+.survey-submit-btn {
+    background: #ff69b4;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background 0.2s;
+    width: 100%;
+    max-width: 220px;
+}
+
+.survey-submit-btn:hover {
+    background: #ff1493;
+}
+
+.survey-submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.notes-section-main {
+    background: #ffe6f0;
+    border-radius: 20px;
+    padding: 15px;
+    margin-top: 15px;
+    width: 100%;
+    border: 1px solid #ffc0cb;
+}
+
+.notes-section-main h3 {
+    color: #ff69b4;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 17px;
+}
+
+.note-input-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+#main-note-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ffb6c1;
+    border-radius: 18px;
+    font-size: 13px;
+    resize: vertical;
+    outline: none;
+    background: white;
+}
+
+#main-note-input:focus {
+    border-color: #ff69b4;
+}
+
+.note-add-btn {
+    padding: 0 16px;
+    background: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.note-add-btn:hover {
+    background: #ff1493;
+}
+
+.notes-list-main {
+    text-align: left;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.note-item {
+    background: white;
+    border: 1px solid #ffb6c1;
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.note-date-time {
+    font-size: 10px;
+    color: #ff69b4;
+    margin-bottom: 3px;
+}
+
+.note-content {
+    font-size: 12px;
+    color: #333;
+    flex: 1;
+    margin-right: 8px;
+    word-break: break-word;
+}
+
+.delete-note {
+    background: none;
+    border: none;
+    color: #ffb6c1;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 3px;
+}
+
+.delete-note:hover {
+    color: #ff69b4;
+}
+
+.empty-notes {
+    text-align: center;
+    color: #999;
+    padding: 12px;
+    font-size: 13px;
+    background: white;
+    border-radius: 12px;
+}
+
+.today-counter {
+    color: #ff69b4;
+    font-size: 11px;
+    margin-bottom: 8px;
+    padding: 4px;
+    background: white;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.dynamics-section {
+    background: #fff5f8;
+    border-radius: 20px;
+    padding: 15px;
+    margin: 10px 0;
+    width: 100%;
+    border: 1px solid #ffe0e8;
+}
+
+.dynamics-section h3 {
+    color: #ff69b4;
+    margin-bottom: 12px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.table-container {
+    background: white;
+    border-radius: 16px;
+    overflow-x: auto;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dynamics-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.dynamics-table th {
+    background: #ffe6f0;
+    color: #ff69b4;
+    padding: 8px 10px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+}
+
+.dynamics-table td {
+    padding: 6px 10px;
+    text-align: left;
+    border-bottom: 1px solid #ffe0e8;
+    color: #555;
+}
+
+.empty-table {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-size: 13px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 25px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+}
+
+.close-modal {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-modal:hover {
+    color: #ff69b4;
+}
+
+.modal-content h3 {
+    color: #ff69b4;
+    margin-bottom: 15px;
+    font-size: 17px;
+}
+
+.mark-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    clear: both;
+    margin-top: 8px;
+}
+
+.mark-btn {
+    background-color: #ffb6c1 !important;
+    color: #5a2e3a;
+    padding: 10px;
+    border: none;
+    border-radius: 22px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.auth-wrapper, .setup-wrapper {
+    text-align: center;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+}
+
+.auth-kitty-large, .setup-kitty {
+    width: 160px;
+    height: 160px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.auth-container, .setup-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+.auth-container h1, .setup-container h2 {
+    color: #ff69b4;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.auth-input, .setup-input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #ffb6c1;
+    border-radius: 25px;
+    font-size: 14px;
+    outline: none;
+}
+
+.auth-input:focus, .setup-input:focus {
+    border-color: #ff69b4;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.auth-btn, .setup-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background: #ff69b4;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.auth-btn:hover, .setup-btn:hover {
+    transform: scale(1.02);
+    background: #ff1493;
+}
+
+.auth-btn.secondary {
+    background: #ffb6c1;
+    color: #ff69b4;
+}
+
+.auth-btn.secondary:hover {
+    background: #ffa0b0;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 10px;
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    color: #ff69b4;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.countdown-text {
+    text-align: center;
+    margin-top: -75px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff69b4;
+    background: rgba(255,255,240,0.9);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 40px;
+    width: auto;
+    align-self: center;
+}
+
+@media (max-width: 550px) {
+    .content-wrapper {
+        margin-top: 70px;
+        padding: 20px 12px 30px;
+    }
+
+    .main-kitty {
+        width: 120px;
+        height: 120px;
+        margin-top: 20px;
+    }
+
+    .thought-bubble-main {
+        top: -5px;
+        font-size: 10px;
+        padding: 6px 12px;
+        max-width: 220px;
+    }
+
+    .calendar-week-row {
+        gap: 5px;
+    }
+
+    .weekday-cell {
+        font-size: 11px;
+        padding: 3px 0;
+    }
+
+    .calendar-days-grid {
+        gap: 5px;
+    }
+
+    .day-button {
+        font-size: 12px;
+    }
+
+    .phase-day-number {
+        font-size: 24px;
+    }
+
+    .phase-name-text {
+        font-size: 12px;
+    }
+
+    .main-title {
+        font-size: 18px;
+    }
+
+    .block-header {
+        font-size: 15px;
+    }
+
+    .kitty-container {
+        margin-bottom: 100px;
+    }
+}

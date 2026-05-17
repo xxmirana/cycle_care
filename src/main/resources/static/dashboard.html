@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная - Hello Kitty Cycle Care</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icons/icon-512.png">
+    <meta name="theme-color" content="#ffb6c1">
+</head>
+<body>
+<div class="main-header">
+    <div class="header-left">
+        <span class="greeting">Привет, <span id="username-display"></span>! 👋</span>
+    </div>
+    <div class="header-right">
+        <button onclick="logout()" class="logout-btn">🚪 Выйти</button>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="main-content-center">
+        <div class="kitty-container">
+            <img src="icons/icon-512.png" alt="Hello Kitty" id="main-kitty-image" class="main-kitty">
+            <div class="thought-bubble-main" id="main-thought-bubble">
+                🌸 Сегодня первый день цикла. Хочу тепла и ласки!
+            </div>
+        </div>
+
+        <div id="countdown-container" class="countdown-text"></div>
+
+        <h2 class="main-title">Начнем заботиться о Китти! 🐱</h2>
+
+        <div class="calendar-section">
+            <div class="phase-card" onclick="openPhaseInfo()">
+                <div class="phase-day-number" id="phase-day-number">День 1</div>
+                <div class="phase-name-text" id="phase-name-text">🌸 Менструальная фаза</div>
+            </div>
+            <div class="calendar-week-row">
+                <div class="weekday-cell">Пн</div><div class="weekday-cell">Вт</div><div class="weekday-cell">Ср</div><div class="weekday-cell">Чт</div><div class="weekday-cell">Пт</div><div class="weekday-cell">Сб</div><div class="weekday-cell">Вс</div>
+            </div>
+            <div class="calendar-days-grid" id="calendar-grid"></div>
+        </div>
+
+        <!-- Три таблицы динамики состояния -->
+        <div class="dynamics-section">
+            <h3>📊 Динамика настроения</h3>
+            <div id="mood-table-container" class="table-container">Загрузка...</div>
+        </div>
+        <div class="dynamics-section">
+            <h3>⚡ Динамика энергии</h3>
+            <div id="energy-table-container" class="table-container">Загрузка...</div>
+        </div>
+        <div class="dynamics-section">
+            <h3>❤️ Динамика самочувствия</h3>
+            <div id="symptom-table-container" class="table-container">Загрузка...</div>
+        </div>
+
+        <div class="survey-blocks">
+            <div class="survey-block" onclick="toggleMoodOptions()">
+                <div class="block-header">😊 Настроение</div>
+                <div class="block-value" id="mood-value">Не выбрано</div>
+                <div class="block-options" id="mood-options" style="display: none;">
+                    <div onclick="selectMood('happy'); event.stopPropagation()">😊 Счастливая</div>
+                    <div onclick="selectMood('sad'); event.stopPropagation()">😢 Грустная</div>
+                    <div onclick="selectMood('irritated'); event.stopPropagation()">😠 Раздражительная</div>
+                    <div onclick="selectMood('playful'); event.stopPropagation()">🎈 Игривая</div>
+                    <div onclick="selectMood('tired'); event.stopPropagation()">😴 Уставшая</div>
+                </div>
+            </div>
+
+            <div class="survey-block" onclick="toggleEnergyOptions()">
+                <div class="block-header">⚡ Энергия</div>
+                <div class="block-value" id="energy-value">Не выбрано</div>
+                <div class="block-options" id="energy-options" style="display: none;">
+                    <div onclick="selectEnergy('high'); event.stopPropagation()">⚡ Много энергии</div>
+                    <div onclick="selectEnergy('medium'); event.stopPropagation()">✨ Средне</div>
+                    <div onclick="selectEnergy('low'); event.stopPropagation()">😴 Хочу спать</div>
+                    <div onclick="selectEnergy('tired'); event.stopPropagation()">🛋️ Упадок сил</div>
+                </div>
+            </div>
+
+            <div class="survey-block" onclick="toggleSymptomOptions()">
+                <div class="block-header">❤️ Самочувствие</div>
+                <div class="block-value" id="symptom-value">Не выбрано</div>
+                <div class="block-options" id="symptom-options" style="display: none;">
+                    <div onclick="selectSymptom('none'); event.stopPropagation()">✅ Все ок</div>
+                    <div onclick="selectSymptom('cramps'); event.stopPropagation()">😖 Болит животик</div>
+                    <div onclick="selectSymptom('headache'); event.stopPropagation()">🤕 Головная боль</div>
+                    <div onclick="selectSymptom('backpain'); event.stopPropagation()">🔴 Болит спина</div>
+                    <div onclick="selectSymptom('bloating'); event.stopPropagation()">🎈 Вздутие</div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="submitSurvey()" class="survey-submit-btn">Сохранить состояние</button>
+
+        <div class="notes-section-main">
+            <h3>📝 Заметочки</h3>
+            <div class="note-input-container">
+                <textarea id="main-note-input" placeholder="Что сегодня заметил?" rows="2"></textarea>
+                <button onclick="addNote()" class="note-add-btn">+ Добавить</button>
+            </div>
+            <div class="notes-list-main" id="main-notes-list"></div>
+        </div>
+    </div>
+</div>
+
+<div id="dayMarkModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeDayMarkModal()">&times;</span>
+        <h3>🌸 Отметить симптом</h3>
+        <div class="mark-options">
+            <button onclick="markDay('period')" class="mark-btn">🩸 Менструация</button>
+            <button onclick="markDay('sex_protected')" class="mark-btn">🔒 Секс (защищенный)</button>
+            <button onclick="markDay('sex_unprotected')" class="mark-btn">💕 Секс (незащищенный)</button>
+            <button onclick="markDay('ovulation')" class="mark-btn">✨ Овуляция</button>
+            <button onclick="markDay('pms')" class="mark-btn">☁️ ПМС</button>
+        </div>
+    </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

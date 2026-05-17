@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Hello Kitty Cycle Care</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icons/icon-512.png">
+    <meta name="theme-color" content="#ffb6c1">
+</head>
+<body>
+<div class="auth-wrapper">
+    <img src="icons/icon-512.png" alt="Hello Kitty" class="auth-kitty-large">
+    <div class="auth-container">
+        <h1>🐱 Hello Kitty Cycle Care</h1>
+        <p>Заботься о Китти каждый день!</p>
+        <input type="text" id="username" placeholder="Твоё имя (только латиница)" class="auth-input">
+        <input type="password" id="password" placeholder="Пароль" class="auth-input">
+        <div class="auth-buttons">
+            <button onclick="login()" class="auth-btn">Войти</button>
+            <button onclick="register()" class="auth-btn secondary">Регистрация</button>
+        </div>
+        <div id="error-message" class="error-message"></div>
+    </div>
+</div>
+
+<script>
+    const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:8081' : 'https://your-app-name.onrender.com';
+    const errorDiv = document.getElementById('error-message');
+
+    function showError(msg) {
+        errorDiv.textContent = msg;
+        errorDiv.style.display = 'block';
+        setTimeout(() => { errorDiv.style.display = 'none'; }, 3000);
+    }
+
+    function validateUsername(username) {
+        const latinRegex = /^[a-zA-Z0-9_]+$/;
+        if (!username) return false;
+        if (!latinRegex.test(username)) return false;
+        return true;
+    }
+
+    async function login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!username || !password) {
+            showError('Заполни все поля!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, password: password })
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                localStorage.setItem('userId', user.id);
+                localStorage.setItem('username', user.username);
+                window.location.href = 'check-cycle.html';
+            } else {
+                const error = await response.text();
+                showError('Ошибка входа: ' + error);
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError('Не удалось подключиться к серверу');
+        }
+    }
+
+    async function register() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!username || !password) {
+            showError('Заполни все поля!');
+            return;
+        }
+
+        if (!validateUsername(username)) {
+            showError('Имя может содержать только латиницу, цифры и _');
+            return;
+        }
+
+        const user = { username: username, passwordHash: password };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            });
+
+            if (response.ok) {
+                alert('✅ Регистрация успешна! Теперь войди.');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                const error = await response.text();
+                if (error.includes('already exists') || error.includes('уже существует')) {
+                    showError('Пользователь с таким именем уже существует');
+                } else {
+                    showError('Ошибка регистрации: ' + error);
+                }
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError('Не удалось подключиться к серверу');
+        }
+    }
+</script>
+</body>
+</html>
