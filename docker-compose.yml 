@@ -1,17 +1,15 @@
 
 services:
   postgres:
-    image: postgres:16
+    image: postgres:15
     container_name: kittycare_postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backups:/backups
     ports:
       - "5432:5432"
     healthcheck:
@@ -23,7 +21,8 @@ services:
       - kittycare_network
 
   app:
-    image: kittycare_app
+    build: .
+    container_name: kittycare_app
     restart: unless-stopped
     depends_on:
       postgres:
@@ -32,15 +31,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
-      SPRING_JPA_SHOW_SQL: "true"
-      SERVER_PORT: 8081
+      SERVER_PORT: ${SERVER_PORT:-8081}
     ports:
-      - "8081:8081" 
-    volumes:
-      - ./logs:/app/logs
+      - "80:8081"
     networks:
       - kittycare_network
 
@@ -51,4 +44,3 @@ volumes:
 networks:
   kittycare_network:
     name: kittycare_network
-
