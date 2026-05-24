@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8081';
+const API_BASE_URL = '';
 let currentUser = null;
 let currentPhase = null;
 let selectedMood = null;

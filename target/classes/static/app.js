@@ -45,7 +45,7 @@ function saveCycleMarks() {
 // Проверка, есть ли данные о цикле
 async function checkCycleData() {
     try {
-        const response = await fetch(`http://localhost:8081/api/cycle/phase/${currentUser.id}`);
+        const response = await fetch(`/api/cycle/phase/${currentUser.id}`);
         if (response.ok) {
             currentPhase = await response.json();
             hasCycleData = true;
@@ -85,7 +85,7 @@ async function saveInitialCycleData() {
     }
 
     try {
-        await fetch(`http://localhost:8081/api/cycle/start?userId=${currentUser.id}&date=${date}&length=${length}`, {
+        await fetch(`/api/cycle/start?userId=${currentUser.id}&date=${date}&length=${length}`, {
             method: 'POST'
         });
         checkCycleData();
@@ -101,7 +101,7 @@ async function login() {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('http://localhost:8081/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: username, password: password })
@@ -134,7 +134,7 @@ async function register() {
     };
 
     try {
-        const response = await fetch('http://localhost:8081/api/auth/register', {
+        const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user)
@@ -176,7 +176,7 @@ async function loadPhase() {
     if (!currentUser) return;
 
     try {
-        const response = await fetch(`http://localhost:8081/api/cycle/phase/${currentUser.id}`);
+        const response = await fetch(`/api/cycle/phase/${currentUser.id}`);
         if (response.ok) {
             currentPhase = await response.json();
             updatePhaseInfo();
@@ -451,7 +451,7 @@ async function submitSurveyFromMain() {
     };
 
     try {
-        await fetch('http://localhost:8081/api/survey', {
+        await fetch('/api/survey', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(survey)
@@ -472,7 +472,7 @@ async function submitSurveyFromMain() {
 
 async function checkTodaySurvey() {
     try {
-        const response = await fetch(`http://localhost:8081/api/survey/${currentUser.id}/today`);
+        const response = await fetch(`/api/survey/${currentUser.id}/today`);
         if (response.ok) {
             document.querySelector('.survey-submit-btn').disabled = true;
             document.querySelector('.survey-submit-btn').textContent = '✅ Уже ответил сегодня';
@@ -511,7 +511,7 @@ async function addNoteFromMain() {
     };
 
     try {
-        await fetch('http://localhost:8081/api/notes', {
+        await fetch('/api/notes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(note)
@@ -527,7 +527,7 @@ async function addNoteFromMain() {
 
 async function getTodayNotesCount() {
     try {
-        const response = await fetch(`http://localhost:8081/api/notes/${currentUser.id}`);
+        const response = await fetch(`/api/notes/${currentUser.id}`);
         const notes = await response.json();
         const today = new Date().toISOString().split('T')[0];
 
@@ -542,7 +542,7 @@ async function loadNotes() {
     if (!currentUser) return;
 
     try {
-        const response = await fetch(`http://localhost:8081/api/notes/${currentUser.id}`);
+        const response = await fetch(`/api/notes/${currentUser.id}`);
         const notes = await response.json();
         renderNotes(notes);
     } catch (error) {
@@ -600,7 +600,7 @@ function renderNotes(notes) {
 
 async function deleteNote(noteId) {
     try {
-        await fetch(`http://localhost:8081/api/notes/${noteId}`, {
+        await fetch(`/api/notes/${noteId}`, {
             method: 'DELETE'
         });
         await loadNotes();
